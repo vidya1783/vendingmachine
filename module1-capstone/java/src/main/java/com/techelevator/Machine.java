@@ -19,6 +19,23 @@ public class Machine {
         this.itemsByLocation.put(itemLocation,item);
     }
 
+    private int priceToInt(String price) {
+        // accepts a price, such as "1.25," and converts to penny
+        // math int 125
+        // dollarsAndCents[] = {"1","25"}
+
+        String[] dollarsAndCents = price.split("\\.");
+        String dollarPortionString = dollarsAndCents[0];
+        String centsPortionString = dollarsAndCents[1];
+
+        int dollarPortion = Integer.parseInt(dollarPortionString);
+        int centsPortion = Integer.parseInt(centsPortionString);
+
+        int centsTotal = dollarPortion*100 + centsPortion;
+
+        return centsTotal;
+    }
+
     public void loadMachine() throws Exception {
 
         File stockFile = new File(dataDirectory,stockFileName);
@@ -35,7 +52,14 @@ public class Machine {
                 if (!stockEntries.length == 4){
                     continue;
                 }
+                String location = stockEntries[0];
+                String itemName = stockEntries[1];
+                int price = priceToInt(stockEntries[2]);
+                String type = stockEntries[3];
 
+
+
+                
             }
 
         }
