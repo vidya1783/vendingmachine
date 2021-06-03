@@ -6,10 +6,21 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Machine {
-    public static final String stockFileName ="vendingmachine.csv";
-    public static final String dataDirectory = "datafiles";
+    private static final String stockFileName ="vendingmachine.csv";
+    private static final String dataDirectory = "datafiles";
     private Map<String,Item> itemsByLocation;
 
+    public Machine(){
+        try {
+            loadMachine();
+        }
+        catch (IOException ex){
+            System.out.println("Problem reading file");
+        }
+        catch (Exception e){
+            System.out.println("Something bad happened and the machine won't work");
+        }
+    }
     public Map<String, Item> getItemsByLocation () {
         return itemsByLocation;
     }
@@ -18,6 +29,8 @@ public class Machine {
     {
         this.itemsByLocation.put(itemLocation,item);
     }
+
+
 
     private int priceToInt(String price) {
         // accepts a price, such as "1.25," and converts to penny
@@ -49,7 +62,7 @@ public class Machine {
                     continue;
                 }
                 String[] stockEntries = stockEntry.split("\\|");
-                if (!stockEntries.length == 4){
+                if (!(stockEntries.length == 4)){
                     continue;
                 }
                 String location = stockEntries[0];
@@ -57,17 +70,31 @@ public class Machine {
                 int price = priceToInt(stockEntries[2]);
                 String type = stockEntries[3];
 
+                Item newItem;
+                if (type.equals("Chip")){
+                    newItem = new Chips(itemName,price);
+                }
+                if (type.equals("Candy")){
+                    newItem = new Candy(itemName,price);
+                }
+                if (type.equals("Gum")){
+                    newItem = new Gum(itemName,price);
+                }
+                if (type.equals("Drink")){
+                    newItem = new Beverage(itemName,price);
+                }
+                if (type != null){
+                    addItem(location,newItem);
+                }
 
-
-                
             }
 
         }
         catch (IOException ex) {
-            System.out.println("There was a problem and we need to abort loading the machine");
+           throw ex;
         }
-        catch (Exception e){
-            System.out.println("There was a problem with the machine");
+        catch (Exception ex){
+            throw ex;
         }
 
     }

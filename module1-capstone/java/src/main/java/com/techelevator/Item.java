@@ -6,9 +6,6 @@ public abstract class Item {
     private int price=0;
     private int quantityRemaining=5;
 
-    public Item(){
-
-    }
 
     public Item(String itemName, int price){
         this.itemName=itemName;
