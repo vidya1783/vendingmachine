@@ -6,6 +6,16 @@ public abstract class Item {
     private int price=0;
     private int quantityRemaining=5;
 
+    public Item(){
+
+    }
+
+    public Item(String itemName, int price){
+        this.itemName=itemName;
+        this.price=price;
+        this.quantityRemaining=5;
+    }
+
     public abstract void dispenseMessage();
 
     public String getItemName() {
@@ -31,4 +41,6 @@ public abstract class Item {
     public void setQuantityRemaining(int quantityRemaining) {
         this.quantityRemaining = quantityRemaining;
     }
+
+
 }
