@@ -2,13 +2,15 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Machine {
     private static final String stockFileName ="vendingmachine.csv";
-    private static final String dataDirectory = "datafiles";
-    private Map<String,Item> itemsByLocation;
+    // private static final String dataDirectory = "datafiles";
+    private Map<String,Item> itemsByLocation = new HashMap<>();
 
     public Machine(){
         try {
@@ -51,9 +53,14 @@ public class Machine {
 
     public void loadMachine() throws Exception {
 
-        File stockFile = new File(dataDirectory,stockFileName);
+        File stockFile = new File(stockFileName);
+        // String absolutePath = stockFile.getAbsolutePath();
+        // String canonicalPath = stockFile.getCanonicalPath();
+        // System.out.println(absolutePath);
+        // System.out.println(canonicalPath);
         if (!stockFile.exists()) {
             System.out.println("File does not exist");
+            throw new IOException();
         }
         try (Scanner stockFileInput = new Scanner(stockFile)){
             while (stockFileInput.hasNextLine()){
@@ -70,7 +77,7 @@ public class Machine {
                 int price = priceToInt(stockEntries[2]);
                 String type = stockEntries[3];
 
-                Item newItem;
+                Item newItem = null;
                 if (type.equals("Chip")){
                     newItem = new Chips(itemName,price);
                 }
@@ -94,6 +101,7 @@ public class Machine {
            throw ex;
         }
         catch (Exception ex){
+            System.out.println(ex.getMessage());
             throw ex;
         }
 
