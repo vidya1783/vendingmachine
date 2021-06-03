@@ -1,5 +1,6 @@
 package com.techelevator;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class CoinBox {
@@ -10,11 +11,31 @@ public class CoinBox {
         }
         balance += moneyToAdd;
     }
+
     public Map<String,Integer> makeChange(int costOfItem) {
-        int newBalance = balance - costOfItem;
-        if (newBalance < 0) {
+        Map<String,Integer> changeMap = new HashMap<>();
+        int change = balance - costOfItem;
+        if (change < 0) {
             return null;
         }
+
+        Integer quarters;
+        Integer dimes;
+        Integer nickels;
+
+        quarters = change % 25;
+        change -= quarters*25;
+        changeMap.put("quarters",quarters);
+        dimes = change % 10;
+        change -= dimes*10;
+        changeMap.put("dimes",dimes);
+        nickels = change % 5;
+        change -= nickels*5;
+        changeMap.put("nickels",nickels);
+
+        balance = 0;
+
+        return changeMap;
 
     }
 
