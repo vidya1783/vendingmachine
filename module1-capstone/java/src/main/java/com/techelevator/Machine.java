@@ -35,7 +35,7 @@ public class Machine {
                 if (!stockEntries.length == 4){
                     continue;
                 }
-                
+
             }
 
         }
