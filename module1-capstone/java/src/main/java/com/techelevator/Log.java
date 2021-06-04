@@ -1,10 +1,48 @@
 package com.techelevator;
 
+import java.io.*;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
 
 public class Log {
+    File outputFile;
+    PrintWriter writer;
+    private static final String logfileName = "Log.txt";
+
+    public Log() {
+        outputFile = new File(logfileName);
+
+        if (!outputFile.exists()) {
+            try { outputFile.createNewFile(); }
+            catch (IOException ex)
+            { System.out.println("Could not create logfile."); }
+            catch (Exception ex)
+            { System.out.println("There was a problem creating the file."); }
+        }
+    }
+
+    public void writeLog(int startingBalance, int endingBalance) // when adding money
+    {
+        String logMessage;
+        logMessage = assembleFeedMoneyLog(startingBalance,endingBalance);
+    }
+
+    public void writeLog(int startingBalance) // when giving change, ending balance is 0
+    {
+        String logMessage;
+        logMessage = assembleGiveChangeLog(startingBalance);
+    }
+
+    public void writeLog(String itemName, String itemLocation,
+                         int startingBalance, int endingBalance) // when selling something
+    {
+        String logMessage;
+        logMessage = assembleItemBoughtLog(itemName,itemLocation,startingBalance,endingBalance);
+    }
+
+
+
     public static String currentDateTime(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");
         LocalDateTime now = LocalDateTime.now();
@@ -32,9 +70,9 @@ public class Log {
         return assembleLogEntry(m,s,e);
     }
 
-    private static String assembleGiveChangeLog(int startBalance, int endBalance)
+    private static String assembleGiveChangeLog(int startBalance)
     {
-        return assembleLogEntry("GIVE CHANGE:",startBalance,endBalance);
+        return assembleLogEntry("GIVE CHANGE:",startBalance,0);
     }
 
     private static String assembleFeedMoneyLog(int startBalance, int endBalance)
@@ -50,3 +88,4 @@ public class Log {
     }
 
 }
+
