@@ -11,9 +11,12 @@ public class Machine {
     // private static final String dataDirectory = "datafiles";
     private Map<String,Item> itemsByLocation = new HashMap<>();
 
+    public CoinBox coinBox = new CoinBox();
+
     public Machine(){
         try {
             loadMachine();
+            System.out.println("Vending machine loaded");
         }
         catch (IOException ex){
             System.out.println("Problem reading file");
@@ -24,6 +27,10 @@ public class Machine {
     }
     public Map<String, Item> getItemsByLocation () {
         return itemsByLocation;
+    }
+
+    public String currentBalanceAsDollars() {
+        return PennyMath.intToPriceWithDollarSign(coinBox.getBalance());
     }
 
     private void addItem(String itemLocation, Item item)

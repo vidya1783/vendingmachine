@@ -10,6 +10,8 @@ public class CoinBox {
         return balance;
     }
 
+    public void setBalance(int newBalance) {this.balance = newBalance;}
+
     public void feedMoney(int moneyToAdd){
         if(moneyToAdd<0){
             return ;

@@ -13,9 +13,18 @@ public class CoinBoxTest {
     }
 
     @Test
-    public void testBalance(){
+    public void testFeed(){
         coinBox.feedMoney(100);
         int expected = 100;
+        int result = coinBox.getBalance();
+        Assert.assertEquals(expected,result);
+    }
+
+    @Test
+    public void setBalanceTest()
+    {
+        coinBox.setBalance(2000);
+        int expected = 2000;
         int result = coinBox.getBalance();
         Assert.assertEquals(expected,result);
     }

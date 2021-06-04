@@ -44,8 +44,8 @@ public class Log {
     }
 
     private void writeLine(String lineToWrite) {
-        try (PrintWriter writer = new PrintWriter(outputFile)) {
-             writer.println(lineToWrite);
+        try (FileWriter writer = new FileWriter(outputFile,true)) {
+             writer.write(lineToWrite + System.lineSeparator());
         } catch (IOException ex){
             System.out.println("Problem writing to file.");
 
