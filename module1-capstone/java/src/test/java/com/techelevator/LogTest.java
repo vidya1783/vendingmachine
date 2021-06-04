@@ -1,6 +1,8 @@
 package com.techelevator;
 
 import org.junit.*;
+import java.io.*;
+import java.util.Scanner;
 
 public class LogTest {
     @Test
@@ -30,4 +32,36 @@ public class LogTest {
                 testEntry.length());
         Assert.assertEquals(expected,result);
     }
+
+    @Test
+    public void createNewLogTest(){
+        Log testLog = new Log();
+        Assert.assertNotNull(testLog);
+    }
+
+    @Test
+    public void testWriteToFile() {
+        try {
+            Log testLog = new Log();
+            String expected = "FEED MONEY: $5.00 $1.50";
+            testLog.writeLog(500, 150);
+            File logFile = new File("Log.txt");
+            Scanner scanner = new Scanner(logFile);
+            String lineJustRead = "";
+            while (scanner.hasNextLine()){
+                lineJustRead = scanner.nextLine();
+
+            }
+            String result = lineJustRead.substring(lineJustRead.length()-expected.length(),
+                    lineJustRead.length());
+            Assert.assertEquals(expected,result);
+
+        } catch (Exception ex) {
+            Assert.fail("Exception while executing the test.");
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+
 }

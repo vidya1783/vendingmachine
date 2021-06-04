@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 public class Log {
     File outputFile;
-    PrintWriter writer;
     private static final String logfileName = "Log.txt";
 
     public Log() {
@@ -26,12 +25,14 @@ public class Log {
     {
         String logMessage;
         logMessage = assembleFeedMoneyLog(startingBalance,endingBalance);
+        writeLine(logMessage);
     }
 
     public void writeLog(int startingBalance) // when giving change, ending balance is 0
     {
         String logMessage;
         logMessage = assembleGiveChangeLog(startingBalance);
+        writeLine(logMessage);
     }
 
     public void writeLog(String itemName, String itemLocation,
@@ -39,6 +40,18 @@ public class Log {
     {
         String logMessage;
         logMessage = assembleItemBoughtLog(itemName,itemLocation,startingBalance,endingBalance);
+        writeLine(logMessage);
+    }
+
+    private void writeLine(String lineToWrite) {
+        try (PrintWriter writer = new PrintWriter(outputFile)) {
+             writer.println(lineToWrite);
+        } catch (IOException ex){
+            System.out.println("Problem writing to file.");
+
+        } catch (Exception ex){
+            System.out.println("There was another problem writing to the file.");
+        }
     }
 
 
