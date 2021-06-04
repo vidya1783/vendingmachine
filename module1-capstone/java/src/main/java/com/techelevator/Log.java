@@ -20,4 +20,33 @@ public class Log {
 
     }
 
+    private static String assembleLogEntry(String modeString, int startBalance, int endBalance)
+    {
+        // modeString is either GIVE CHANGE:, or FEED MONEY:, or a product followed by position
+        String result = currentDateTime() + " " + modeString + " " +
+                startAndEndBalanceString(startBalance, endBalance);
+        return result;
+    }
+
+    public static String _testAssembleLogEntry(String m, int s, int e) {
+        return assembleLogEntry(m,s,e);
+    }
+
+    private static String assembleGiveChangeLog(int startBalance, int endBalance)
+    {
+        return assembleLogEntry("GIVE CHANGE:",startBalance,endBalance);
+    }
+
+    private static String assembleFeedMoneyLog(int startBalance, int endBalance)
+    {
+        return assembleLogEntry("FEED MONEY:",startBalance, endBalance);
+    }
+
+    private static String assembleItemBoughtLog(String itemName, String itemLocation,
+                                                int startBalance, int endBalance)
+    {
+        String itemPurchasedAtLocation = itemName + " " + itemLocation;
+        return assembleLogEntry(itemPurchasedAtLocation,startBalance,endBalance);
+    }
+
 }

@@ -21,4 +21,13 @@ public class LogTest {
         String result = Log.startAndEndBalanceString(500,250);
         Assert.assertEquals(expected,result);
     }
+
+    @Test
+    public void testAssembleLogEntry() {
+        String expected = "FEED MONEY: $5.00 $1.50";
+        String testEntry = Log._testAssembleLogEntry("FEED MONEY:",500,150);
+        String result = testEntry.substring(testEntry.length()-expected.length(),
+                testEntry.length());
+        Assert.assertEquals(expected,result);
+    }
 }
