@@ -64,6 +64,7 @@ public class Log {
     }
 
     public static String startAndEndBalanceString(int startingBalance,int endingBalance){
+        // ^ we just made it public so we could easily test it
         String startingMoney = PennyMath.intToPriceWithDollarSign(startingBalance);
         String endingMoney = PennyMath.intToPriceWithDollarSign(endingBalance);
         String result = startingMoney + " " + endingMoney;
@@ -71,6 +72,7 @@ public class Log {
 
     }
 
+    // all of the assembly functions are indirectly tested with the log-to-file tests, which pass
     private static String assembleLogEntry(String modeString, int startBalance, int endBalance)
     {
         // modeString is either GIVE CHANGE:, or FEED MONEY:, or a product followed by position

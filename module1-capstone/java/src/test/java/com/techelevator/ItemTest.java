@@ -2,8 +2,6 @@ package com.techelevator;
 
 import org.junit.*;
 
-import java.sql.SQLOutput;
-
 public class ItemTest {
     Item testItem;
 
@@ -11,6 +9,28 @@ public class ItemTest {
     public void init(){
         testItem = new Chips("Pringles",200);
         Assert.assertNotNull(testItem);
+    }
+
+    @Test
+    public void testAllSubtypes() {
+        String name = "Amazing product";
+        int price = 200;
+        testItem = new Chips(name,price);
+        Assert.assertNotNull(testItem);
+        System.out.println("Printing chips message");
+        testItem.dispenseMessage();
+        testItem = new Gum(name,price);
+        Assert.assertNotNull(testItem);
+        System.out.println("Printing gum message");
+        testItem.dispenseMessage();
+        testItem = new Candy(name,price);
+        Assert.assertNotNull(testItem);
+        System.out.println("Printing candy message");
+        testItem.dispenseMessage();
+        testItem = new Beverage(name,price);
+        Assert.assertNotNull(testItem);
+        System.out.println("Printing drink message");
+        testItem.dispenseMessage();
     }
 
     @Test
@@ -59,27 +79,6 @@ public class ItemTest {
         Assert.assertEquals(expected, result);
     }
 
-    @Test
-    public void testAllSubtypes() {
-        String name = "Amazing product";
-        int price = 200;
-        testItem = new Chips(name,price);
-        Assert.assertNotNull(testItem);
-        System.out.println("Printing chips message");
-        testItem.dispenseMessage();
-        testItem = new Gum(name,price);
-        Assert.assertNotNull(testItem);
-        System.out.println("Printing gum message");
-        testItem.dispenseMessage();
-        testItem = new Candy(name,price);
-        Assert.assertNotNull(testItem);
-        System.out.println("Printing candy message");
-        testItem.dispenseMessage();
-        testItem = new Beverage(name,price);
-        Assert.assertNotNull(testItem);
-        System.out.println("Printing drink message");
-        testItem.dispenseMessage();
 
-    }
 
 }

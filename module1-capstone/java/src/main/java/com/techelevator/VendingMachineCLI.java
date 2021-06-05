@@ -27,8 +27,6 @@ public class VendingMachineCLI {
 	private Log logger = new Log();
 	Map<String,Item> itemsByLocation = machine.getItemsByLocation();
 	Scanner systemInput = new Scanner(System.in);
-	String itemSelectedLocation = null;
-	Item itemSelectedObject = null;
 	//CONSTRUCTOR
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
@@ -44,12 +42,15 @@ public class VendingMachineCLI {
 		{
 			Item particularItem = itemsByLocation.get(location);
 			String itemName = particularItem.getItemName();
-			int itemPrice = particularItem.getPrice();
-			String itemPriceString = PennyMath.intToPriceWithDollarSign(itemPrice);
 			int quantityRemaining = particularItem.getQuantityRemaining();
-			String quantityRemainingString = Integer.toString(quantityRemaining) + " left";
+			int itemPrice = particularItem.getPrice();
+			String itemPriceString = (quantityRemaining != 0) ? PennyMath.intToPriceWithDollarSign(itemPrice)
+					: "SOLD OUT";
+			String quantityRemainingString = (quantityRemaining != 0) ? Integer.toString(quantityRemaining) + " left"
+					: "";
 			System.out.println(location + "\t" + itemName + "\t" + itemPriceString + "\t" + quantityRemainingString);
 		}
+		System.out.println("\n Come on, buy something. Current balance: " + machine.currentBalanceAsDollars());
 	}
 
 	// Purchase item method
@@ -57,14 +58,20 @@ public class VendingMachineCLI {
 		int startingBalancePennies = machine.coinBox.getBalance();
 		System.out.println("Current balance: " + machine.currentBalanceAsDollars());
 		System.out.println("How many dollars are you adding?");
-		int dollarsMentioned = Integer.parseInt(systemInput.nextLine());
+		int dollarsMentioned = 0;
+		try { dollarsMentioned = Integer.parseInt(systemInput.nextLine()); }
+		catch (Exception ex) {
+			System.out.println("Nice try. Bad input. I'll count that as nothing.");
+			dollarsMentioned = 0 ;
+		}
+
 		int penniesToAdd = (dollarsMentioned>=0) ? dollarsMentioned*100 : 0;
 		machine.coinBox.feedMoney(penniesToAdd);
 		logger.writeLog(startingBalancePennies,machine.coinBox.getBalance());
 		System.out.println("Current balance: " + machine.currentBalanceAsDollars());
 	}
 
-	private String purchaseRoutine() {
+	private void purchaseRoutine() {
 		System.out.println("Oh Yum! What delicious Umbrella Corp Snack would you like");
 		int availableFunds = machine.coinBox.getBalance();
 		String itemSelected = systemInput.nextLine().toUpperCase();
@@ -87,27 +94,40 @@ public class VendingMachineCLI {
 			return;
 		}
 
-		itemSelectedLocation = itemSelected;
-		itemSelectedObject = stockItem;
+
+		// and now we dispense
+		stockItem.setQuantityRemaining(amountLeft - 1);
+		stockItem.dispenseMessage();
+		String itemName = stockItem.getItemName();
+		int moneyRemaining = availableFunds - price;
+		System.out.println("Here you go, friend.\n" + "Item name: " + itemName + "\n"
+		+ "Item cost: " + PennyMath.intToPriceWithDollarSign(price) + "\n"
+		+ "Money remaining: " + PennyMath.intToPriceWithDollarSign(moneyRemaining) + "\n");
+
+		machine.coinBox.setBalance(moneyRemaining);
+		logger.writeLog(itemName,itemSelected,availableFunds,moneyRemaining);
+
+		displayItemsForPurchase();
 
 		return;
 
 
 	}
 
-	void buyAndCashOut() {
-		int amountLeft = itemSelectedObject.getQuantityRemaining();
-		int price = itemSelectedObject.getPrice();
-		itemSelectedObject.setQuantityRemaining(amountLeft - 1);
-		itemSelectedObject.dispenseMessage();
-		int availableFunds = machine.coinBox.getBalance();
 
-		String itemName = itemSelectedObject.getItemName();
-		machine.coinBox.setBalance(availableFunds - price);
-		logger.writeLog(itemName,itemSelectedLocation,availableFunds,availableFunds-price);
+	void cashOut() {
+		int currentBalance = machine.coinBox.getBalance();
 		System.out.println("Current balance: " + machine.currentBalanceAsDollars());
-		System.out.println("Now returning to you as nickels dimes and quarters.");
-		//
+		System.out.println("Now returning to you as nickels, dimes, and quarters.");
+		Map<String, Integer> change = machine.coinBox.makeChange();
+		for (Map.Entry<String,Integer> changePair : change.entrySet())
+		{
+			String coin = changePair.getKey();
+			Integer value = changePair.getValue();
+			System.out.println(coin + ": " + value);
+		}
+		logger.writeLog(currentBalance);
+
 	}
 
 	// RUN METHOD
@@ -137,7 +157,8 @@ public class VendingMachineCLI {
 			}
 			// PURCHASE SUB MENU LOOP - LOOP LEVEL 0-1-0
 			while(menuLoop.equals(PURCHASE_LOOP)) {
-				choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+				String currentMoney = "Current money provided (still available): " + machine.currentBalanceAsDollars();
+				choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS,currentMoney);
 				if (choice.equals(PURCHASE_MENU_OPTION_ADD_MONEY)) {
 					System.out.println("FEED ME!!!!");
 					feedMoneyRoutine();
@@ -147,13 +168,9 @@ public class VendingMachineCLI {
 				}
 				if (choice.equals(PURCHASE_MENU_OPTION_CASH_OUT)) {
 					System.out.println("Sorry, Umbrella Corp keeps your change");
-					System.out.println("<<< J/K Call Change Routine(s) >>>");
-					if (itemSelectedObject==null||itemSelectedLocation==null) // need to make sure these are reset
-					{
-						System.out.println("Invalid item selected.");
-						continue;
-					}
-					buyAndCashOut();
+					System.out.println("Just kidding. Here you go.");
+
+					cashOut();
 
 				}
 				if (choice.equals(PURCHASE_MENU_OPTION_PREVIOUS_MENU)) {

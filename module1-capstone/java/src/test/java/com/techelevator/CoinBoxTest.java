@@ -30,9 +30,17 @@ public class CoinBoxTest {
     }
 
     @Test
+    public void getBalanceTest()
+    {
+        int expected = 0;
+        int result = coinBox.getBalance();
+        Assert.assertEquals(expected,result);
+    }
+
+    @Test
     public void testChange(){
-        coinBox.feedMoney(200);
-        Map<String , Integer> changeMap = coinBox.makeChange(110);
+        coinBox.setBalance(90);
+        Map<String , Integer> changeMap = coinBox.makeChange();
         int expected1 = 3;
         int expected2 = 1;
         int expected3 = 1;

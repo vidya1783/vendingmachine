@@ -24,6 +24,17 @@ public class Menu {
 		return choice;
 	}
 
+	public Object getChoiceFromOptions(Object[] options, String endString)
+	{
+		Object choice = null;
+		while (choice == null) {
+			displayMenuOptions(options);
+			System.out.println("\n" + endString);
+			choice = getChoiceFromUserInput(options);
+		}
+		return choice;
+	}
+
 	private Object getChoiceFromUserInput(Object[] options) {
 		Object choice = null;
 		String userInput = in.nextLine();

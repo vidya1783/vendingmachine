@@ -40,7 +40,7 @@ public class LogTest {
     }
 
     @Test
-    public void testWriteToFile() {
+    public void testAddMoneyWriteToFile() {
         try {
             Log testLog = new Log();
             String expected = "FEED MONEY: $5.00 $1.50";
@@ -62,6 +62,55 @@ public class LogTest {
         }
 
     }
+
+    @Test
+    public void testGiveChangeWriteToFile() {
+        try {
+            Log testLog = new Log();
+            String expected = "GIVE CHANGE: $5.00 $0.00";
+            testLog.writeLog(500);
+            File logFile = new File("Log.txt");
+            Scanner scanner = new Scanner(logFile);
+            String lineJustRead = "";
+            while (scanner.hasNextLine()){
+                lineJustRead = scanner.nextLine();
+
+            }
+            String result = lineJustRead.substring(lineJustRead.length()-expected.length(),
+                    lineJustRead.length());
+            Assert.assertEquals(expected,result);
+
+        } catch (Exception ex) {
+            Assert.fail("Exception while executing the test.");
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testVendProductWriteToFile() {
+        try {
+            Log testLog = new Log();
+            String expected = "Crunchie B4 $10.00 $8.50";
+            testLog.writeLog("Crunchie","B4",1000,850);
+            File logFile = new File("Log.txt");
+            Scanner scanner = new Scanner(logFile);
+            String lineJustRead = "";
+            while (scanner.hasNextLine()){
+                lineJustRead = scanner.nextLine();
+
+            }
+            String result = lineJustRead.substring(lineJustRead.length()-expected.length(),
+                    lineJustRead.length());
+            Assert.assertEquals(expected,result);
+
+        } catch (Exception ex) {
+            Assert.fail("Exception while executing the test.");
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
 
 
 }

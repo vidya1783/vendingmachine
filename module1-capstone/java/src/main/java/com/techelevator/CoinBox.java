@@ -19,25 +19,21 @@ public class CoinBox {
         balance += moneyToAdd;
     }
 
-    public Map<String,Integer> makeChange(int costOfItem) {
+    public Map<String,Integer> makeChange() {
         Map<String,Integer> changeMap = new HashMap<>();
-        int change = balance - costOfItem;
-        if (change < 0) {
-            return null;
-        }
 
         Integer quarters;
         Integer dimes;
         Integer nickels;
 
-        quarters = change / 25;
-        change -= quarters*25;
+        quarters = balance / 25;
+        balance -= quarters*25;
         changeMap.put("quarters",quarters);
-        dimes = change / 10;
-        change -= dimes*10;
+        dimes = balance / 10;
+        balance -= dimes*10;
         changeMap.put("dimes",dimes);
-        nickels = change / 5;
-        change -= nickels*5;
+        nickels = balance / 5;
+        balance -= nickels*5;
         changeMap.put("nickels",nickels);
 
         balance = 0;
